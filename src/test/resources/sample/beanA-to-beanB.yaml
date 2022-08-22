@@ -1,0 +1,17 @@
+mappingInformation:
+  mappingData:
+    - source: "name"
+      target: "title"
+      converter: "net.freedom.gj.mapper.config.ToStringConverter"
+    - source: "desc"
+      target: "description"
+    - source: "age"
+      target: "years"
+    - source: "groups"
+      target: "entityGroups"
+      objType: "net.freedom.gj.beans.GroupEntity"
+      collection:
+        - source: "name"
+          target: "groupName"
+  postProcessors:
+    - value: "samples.ReportResultPostProcessor"

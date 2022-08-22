@@ -1,0 +1,13 @@
+<mapping>
+    <bind source="name" target="title" converter="org.viablespark.mapper.config.ToStringConverter"/>
+    <bind source="desc" target="description"/>
+    <bind source="age" target="years"/>
+    <bind source="phone.number" target="phoneNumber"/>
+    <collection source="groups" target="entityGroups" type="net.freedom.gj.beans.GroupEntity">
+        <bind source="name" target="groupName"/>
+        <bind source="rank" target="rank"/>
+    </collection>
+    <post-processors>
+        <processor value="ReportResultPostProcessor"/>
+    </post-processors>
+</mapping>

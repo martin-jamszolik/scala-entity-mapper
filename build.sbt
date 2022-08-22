@@ -10,8 +10,8 @@ lazy val root = project
     scalaVersion := scala3Version,
     scalacOptions ++= Seq("-rewrite","-indent"),
 
-    libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
+    libraryDependencies += "org.scala-lang.modules" % "scala-xml_3" % "2.1.0",
     libraryDependencies += "org.glassfish" % "jakarta.el" % "4.0.2",
-    libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
+    libraryDependencies += "org.scalameta" % "munit_3" % "1.0.0-M6" % Test
   )
 
