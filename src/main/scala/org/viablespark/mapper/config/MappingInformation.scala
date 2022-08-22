@@ -5,11 +5,10 @@ import scala.collection.mutable
 import scala.collection.mutable.*
 
 class MappingInformation(mappingData: mutable.Seq[MappingData],
-                         postProcessors: mutable.Seq[PostProcessor]) {
+                         postProcessors: mutable.Seq[PostProcessor]):
   def getData: mutable.Seq[MappingData] = mappingData
 
   def getProcessors: mutable.Seq[PostProcessor] = postProcessors
-}
 
 
 case class MappingData(source: String,

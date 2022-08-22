@@ -17,17 +17,14 @@ class BeanMapperELContext extends ELContext {
 
     def resolveVariable(variable: String): ValueExpression = map(variable)
 
-    def setVariable(variable: String, expr: ValueExpression): ValueExpression = {
-      map.put(variable, expr) match {
+    def setVariable(variable: String, expr: ValueExpression): ValueExpression =
+      map.put(variable, expr) match
         case None => null
         case Some(x) => x
-      }
-    }
   }
   val functionMapper: FunctionMapper = new FunctionMapper() {
-    def resolveFunction(prefix: String, localName: String): Method = {
+    def resolveFunction(prefix: String, localName: String): Method =
       throw new UnsupportedOperationException("Function Not supported yet.")
-    }
   }
 
   override def getELResolver: ELResolver = READ_WRITE

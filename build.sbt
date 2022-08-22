@@ -8,7 +8,7 @@ lazy val root = project
     organization := "org.viablespark.mapper",
 
     scalaVersion := scala3Version,
-    scalacOptions += "-rewrite",
+    scalacOptions ++= Seq("-rewrite","-indent"),
 
     libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.1.0",
     libraryDependencies += "org.glassfish" % "jakarta.el" % "4.0.2",
