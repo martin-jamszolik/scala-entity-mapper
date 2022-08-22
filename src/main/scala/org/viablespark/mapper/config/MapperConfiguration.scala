@@ -20,7 +20,7 @@ trait MapperConfigTrait:
   protected def newInstance[T](impl: String, cl: Class[T]): T =
     val clazz = Class.forName(impl)
     val result = clazz.getDeclaredConstructor().newInstance()
-    result.asInstanceOf[T]
+    cl.cast(result)
 
 trait ConfigContext:
   def source: AnyRef

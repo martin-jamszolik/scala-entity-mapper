@@ -16,11 +16,11 @@ class SimpleXmlMapperConfig
     val parser = ConstructingParser.fromSource(Source.fromInputStream(resource), preserveWS = false)
     val doc = parser.document()
 
-    var list = new ListBuffer[MappingData]()
+    val list = new ListBuffer[MappingData]()
     for (element <- doc \ "bind")
       list += getBindData(element)
     for (element <- doc \ "collection")
-      var b = new ListBuffer[MappingData]()
+      val b = new ListBuffer[MappingData]()
       element.child.foreach(bind => b += getBindData(bind))
       list += MappingData((element \ "@source").text,
         (element \ "@target").text, null, b, (element \ "@type").text)

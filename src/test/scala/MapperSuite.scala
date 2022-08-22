@@ -27,9 +27,9 @@ class MapperSuite extends munit.FunSuite:
 
   private def getEntityMapper: EntityMapper =
     SimpleConfigFactory.add(
-      new SimpleXmlMapperConfig("/sample/beanA-to-beanB.xml"
-        , classOf[BeanA], classOf[BeanB]))
-    new EntityMapperImpl(SimpleConfigFactory)
+      SimpleXmlMapperConfig("/sample/beanA-to-beanB.xml", classOf[BeanA], classOf[BeanB]),
+    )
+    EntityMapperImpl(SimpleConfigFactory)
 
 
 case class BeanA(@BeanProperty var name: String,
@@ -56,7 +56,7 @@ case class Phone(@BeanProperty var number: String,
 
 class ReportResultPostProcessor extends PostProcessor:
   override def process(source: AnyRef, target: AnyRef): Unit =
-    println("Post Process Invoked. Processing source:" + source+ ", target:" + target)
+    println( s"Post Process Invoked. Processing source: $source, target: $target")
 
 
 
