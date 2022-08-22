@@ -8,12 +8,12 @@ trait EntityMapper:
 
 class EntityMapperImpl(val configFactory: ConfigFactoryTrait[MapperConfigTrait, ConfigContext]) extends EntityMapper:
 
-  private val expr = ExpressionFactory.newInstance();
+  private val expr = ExpressionFactory.newInstance()
 
   def map[T](src: AnyRef, trg: T): T =
     val configurations = configFactory.getConfigurations(
       new ConfigContext {
-        def source: AnyRef = src;
+        def source: AnyRef = src
         def target: AnyRef = trg.asInstanceOf[AnyRef]
       })
 
@@ -49,7 +49,7 @@ class EntityMapperImpl(val configFactory: ConfigFactoryTrait[MapperConfigTrait, 
       val targetExpr = expr.createValueExpression(elContext,"${target." + item.target + "}", value.getClass)
       targetExpr.setValue(elContext, value)
     catch
-      case e: Exception => println("Map data Error:" + e.getMessage); throw e;
+      case e: Exception => println( s"Map data Error: ${e.getMessage}"); throw e;
 
 
   private def mapCollection(item: MappingData, elCtx: ELContext, value: AnyRef): Unit = {

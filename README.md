@@ -6,21 +6,21 @@ This project uses an Expression Language Library to help with mapping.
 **Entity mapper strengths:**
 
   1. Map deeply structured objects.
-  1. Apply mapping from multiple definitions to map complex object.
-  1. Load mapping configuration with custom implementation details
-  1. Apply converters from source to target object.
-  1. Works on domain objects externally.
+  2. Apply mapping from multiple definitions to map complex object.
+  3. Load mapping configuration with custom implementation details
+  4. Apply converters from source to target object.
+  5. Works on domain objects externally.
 
 **Entity mapper weaknesses:**
   1. All properties are mapped explicitly, as per configuration only. 
-  1. Mapping configuration is one way only. If you need to reverse the mapping, you will need to provide another configuration.
-  2. Data models have to have mutable properties. `case class` are fine as long as they have `var` properties.
+  2. Mapping configuration is one way only. If you need to reverse the mapping, you will need to provide another configuration.
+  3. Data models have to have mutable properties. `case class` are fine as long as they have `var` properties.
 
 ## Roadmap
 
   1. Replace EL dependency with better native solution that is also null-safe. Avoid `@BeanProperty` decorator.
-  1. Research if immutable objects can somehow be also mapped per configuration
-  2. Add yaml Configuration option
+  2. Research if immutable objects can somehow be also mapped per configuration
+  3. Add yaml Configuration option
 
 ### Usage
 
