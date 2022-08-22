@@ -30,5 +30,7 @@ For more information on the sbt-dotty plugin, see the
 
 ### Learn
 
-Best place to start is with a test [MapperSuite](src/test/scala/MapperSuite.scala)
+* Best place to start is with a test [MapperSuite](src/test/scala/MapperSuite.scala)
+* Source of configuration [XML](src/test/resources/sample/beanA-to-beanB.xml)
+* Source of configuration [YAML](src/test/resources/sample/beanA-to-beanB.yaml) **incomplete**
 
