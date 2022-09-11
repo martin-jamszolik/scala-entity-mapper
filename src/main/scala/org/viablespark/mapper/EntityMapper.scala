@@ -1,24 +1,24 @@
 package org.viablespark.mapper
 
-import org.viablespark.mapper.config._
-import jakarta.el._
+import org.viablespark.mapper.config.*
+
+import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
+
 
 trait EntityMapper:
   def map[T](source: AnyRef, target: T): T
 
-class EntityMapperImpl(val configFactory: ConfigFactoryTrait[MapperConfigTrait, ConfigContext]) extends EntityMapper:
-
-  private val expr = ExpressionFactory.newInstance()
-
+class EntityMapperImpl(val configFactory: ConfigurationFactory[MapperConfigTrait, ConfigContext]) extends EntityMapper :
   def map[T](src: AnyRef, trg: T): T =
     val configurations = configFactory.getConfigurations(
       new ConfigContext {
         def source: AnyRef = src
+
         def target: AnyRef = trg.asInstanceOf[AnyRef]
       })
 
-    // Get EL context with source and target objects configured
-    val elContext = getElContext(src, trg)
+    val elContext = MapperContext(src, trg.asInstanceOf[AnyRef])
 
     for (config <- configurations)
       val info = config.getMappingInformation
@@ -29,51 +29,42 @@ class EntityMapperImpl(val configFactory: ConfigFactoryTrait[MapperConfigTrait, 
     trg
 
 
-  private def mapData(item: MappingData, elContext: ELContext, srcClass: Class[_]): Unit =
+  private def mapData(item: MappingData, elContext: MapperContext, srcClass: Class[?]): Unit =
     try
-      val sourceExpression = expr.createValueExpression(elContext, "${source." + item.source + "}",classOf[AnyRef])
-      val sourceValue = sourceExpression.getValue(elContext)
+      val sourceValue = elContext.source.getValue(item.source, classOf[AnyRef])
 
-      // Create target if it is null
-      createTargetObject(item, elContext, sourceValue)
+      //TODO: Create target if it is null
 
       // If the target is Array or Collection, loop through the collection
       if (item.collection.nonEmpty)
-        mapCollection(item, elContext, sourceValue)
+        mapCollection(item, elContext, sourceValue.asInstanceOf[Iterable[?]])
         return
 
       // Convert source value if a converter is specified
       val value = item.converter.getOrElse(NoOpsConverter.instance).convert(sourceValue)
 
       //Copy source value to target
-      val targetExpr = expr.createValueExpression(elContext,"${target." + item.target + "}", value.getClass)
-      targetExpr.setValue(elContext, value)
+      elContext.target.setValue(item.target, value.asInstanceOf[AnyRef])
     catch
-      case e: Exception => println( s"Map data Error: ${e.getMessage}"); throw e;
+      case e: Exception => println(s"Map data Error: ${e.getMessage}"); throw e;
+
+  private def mapCollection(item: MappingData, elCtx: MapperContext, sourceValues: Iterable[?]): Unit =
+    val list = new mutable.ListBuffer[AnyRef]
+    for (sourceObject <- sourceValues)
+      val targetObject = newInstance(item.objType, classOf[AnyRef])
+      val indexContext = MapperContext(sourceObject.asInstanceOf[AnyRef], targetObject)
+      item.collection.foreach(srcItem => {
+        mapData(srcItem, indexContext, sourceObject.getClass)
+      })
+      list += targetObject
+    elCtx.target.setValue(item.target, list)
 
 
-  private def mapCollection(item: MappingData, elCtx: ELContext, value: AnyRef): Unit = {
+  private def createTargetObject(item: MappingData, elCtx: MapperContext, value: AnyRef): Unit = {
 
   }
 
-  private def createTargetObject(item: MappingData, elCtx: ELContext, value: AnyRef): Unit = {
-
-  }
-
-
-  /**
-   * Gets ELContext instance. It uses SimpleContext.
-   * It also configures source and target objects with names source and target.
-   *
-   * @param source Source object
-   * @param target Target object
-   * @return Returns ELContext object.
-   */
-  private def getElContext[T](source: Any, target: T): ELContext =
-    val context = new BeanMapperELContext()
-    context.setSource(expr.createValueExpression(source, source.getClass))
-    context.setTarget(expr.createValueExpression(target, target.getClass))
-    context
-
-
-
+  private def newInstance[T](impl: String, cl: Class[T]): T =
+    val clazz = Class.forName(impl)
+    val result = clazz.getDeclaredConstructor().newInstance()
+    cl.cast(result)
