@@ -3,7 +3,7 @@
     <bind source="desc" target="description"/>
     <bind source="age" target="years"/>
     <bind source="phone.number" target="phoneNumber"/>
-    <collection source="groups" target="entityGroups" type="net.freedom.gj.beans.GroupEntity">
+    <collection source="groups" target="entityGroups" type="GroupEntity">
         <bind source="name" target="groupName"/>
         <bind source="rank" target="rank"/>
     </collection>
